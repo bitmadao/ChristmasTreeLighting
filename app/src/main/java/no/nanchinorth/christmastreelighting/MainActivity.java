@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         imgChristmasTree = findViewById(R.id.imgChristmasTree);
-        txtCountdown = findViewById(R.id.txtSwitchLabel);
-        switchCompat = findViewById(R.id.switch1);
+        txtCountdown = findViewById(R.id.txtCountdown);
+        switchCompat = findViewById(R.id.swLightSwitch);
         btnCountdown = findViewById(R.id.btnCountDown);
         btnCountdown.setOnClickListener(MainActivity.this);
 

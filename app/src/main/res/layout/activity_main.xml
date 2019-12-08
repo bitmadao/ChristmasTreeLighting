@@ -18,18 +18,18 @@
         app:srcCompat="@drawable/christmastree" />
 
     <TextView
-        android:id="@+id/txtSwitchLabel"
+        android:id="@+id/txtCountdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="#E91E63"
         android:textSize="72sp"
-        app:layout_constraintBottom_toTopOf="@id/switch1"
+        app:layout_constraintBottom_toTopOf="@id/swLightSwitch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch1"
+        android:id="@+id/swLightSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#000000"
@@ -51,5 +51,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switch1" />
+        app:layout_constraintTop_toBottomOf="@id/swLightSwitch" />
 </androidx.constraintlayout.widget.ConstraintLayout>
