@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -69,20 +70,29 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnClic
      * while interacting with activity UI.
      */
 
-    private ImageView imgChristmasTree;
-    private TextView txtCountdown;
-    private SwitchCompat switchCompat;
-    private Button btnCountdown;
+    private String BOOLEAN_KEY = "BOOLEAN";
+    private boolean mOutStateBoolean;
 
-    private AnimatorSet aSetFadeIn;
-    private AnimatorSet aSetFadeOut;
+    private ImageView mImgChristmasTree;
+    private TextView mTxtCountdown;
+    private SwitchCompat mSwitchCompat;
+    private Button mBtnCountdown;
+
+    private AnimatorSet mASetFadeIn;
+    private AnimatorSet mASetFadeOut;
     
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_fullscreen);
+
+        if(savedInstanceState != null){
+            mOutStateBoolean = savedInstanceState.getBoolean(BOOLEAN_KEY);
+
+        } else {
+            mOutStateBoolean = false ;
+        }
 
         mVisible = true;
         mContentView = findViewById(R.id.fullscreen_content);
@@ -95,21 +105,30 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnClic
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
 
-        imgChristmasTree = findViewById(R.id.imgChristmasTree);
-        txtCountdown = findViewById(R.id.txtCountdown);
-        switchCompat = findViewById(R.id.swLightSwitch);
-        btnCountdown = findViewById(R.id.btnCountDown);
+        mImgChristmasTree = findViewById(R.id.imgChristmasTree);
+        mTxtCountdown = findViewById(R.id.txtCountdown);
+        mSwitchCompat = findViewById(R.id.swLightSwitch);
+        mBtnCountdown = findViewById(R.id.btnCountDown);
 
-        btnCountdown.setOnClickListener(FullscreenActivity.this);
-        switchCompat.setOnCheckedChangeListener(FullscreenActivity.this);
+        mASetFadeIn = (AnimatorSet) AnimatorInflater.loadAnimator(FullscreenActivity.this, R.animator.tween_in);
+        mASetFadeIn.setTarget(mImgChristmasTree);
 
-        aSetFadeIn = (AnimatorSet) AnimatorInflater.loadAnimator(FullscreenActivity.this, R.animator.tween_in);
-        aSetFadeIn.setTarget(imgChristmasTree);
+        mASetFadeOut = (AnimatorSet) AnimatorInflater.loadAnimator(FullscreenActivity.this, R.animator.tween_out);
+        mASetFadeOut.setTarget(mImgChristmasTree);
 
-        aSetFadeOut = (AnimatorSet) AnimatorInflater.loadAnimator(FullscreenActivity.this, R.animator.tween_out);
-        aSetFadeOut.setTarget(imgChristmasTree);
+        mImgChristmasTree.setAlpha(0f);
 
-        imgChristmasTree.setAlpha(0f);
+        mBtnCountdown.setOnClickListener(FullscreenActivity.this);
+        mSwitchCompat.setOnCheckedChangeListener(FullscreenActivity.this);
+
+        mSwitchCompat.setChecked(mOutStateBoolean);
+
+        if(mSwitchCompat.isChecked()){
+            lightSwitch();
+        }
+
+
+
 
     }
 
@@ -121,6 +140,12 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnClic
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+    }
+
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(BOOLEAN_KEY, mSwitchCompat.isChecked());
     }
 
     private void toggle() {
@@ -182,39 +207,39 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(buttonView.getId() == switchCompat.getId()){
+        if(buttonView.getId() == mSwitchCompat.getId()){
             lightSwitch();
         }
     }
 
     public void lightSwitch(){
-        if(aSetFadeOut.isStarted()){
-            aSetFadeOut.end();
+        if(mASetFadeOut.isStarted()){
+            mASetFadeOut.end();
         }
 
-        if(switchCompat.isChecked()){
-            aSetFadeIn.start();
-            btnCountdown.animate().alpha(0f).setDuration(1000).start();
-            btnCountdown.setEnabled(false);
+        if(mSwitchCompat.isChecked()){
+            mASetFadeIn.start();
+            mBtnCountdown.animate().alpha(0f).setDuration(1000).start();
+            mBtnCountdown.setEnabled(false);
 
         } else {
-            aSetFadeIn.end();
-            aSetFadeOut.start();
-            btnCountdown.animate().alpha(1f).setDuration(1000).start();
-            btnCountdown.setEnabled(true);
+            mASetFadeIn.end();
+            mASetFadeOut.start();
+            mBtnCountdown.animate().alpha(1f).setDuration(1000).start();
+            mBtnCountdown.setEnabled(true);
 
         }
     }
 
     public void lightingCountdown(){
-        if(!switchCompat.isChecked()) {
+        if(!mSwitchCompat.isChecked()) {
 
             new CountDownTimer(4000, 1000) {
                 @SuppressLint("DefaultLocale")
                 @Override
                 public void onTick(long millisUntilFinished) {
                     if(millisUntilFinished % 4000 != 0) {
-                        txtCountdown.setText(String.format("%d", millisUntilFinished / 1000));
+                        mTxtCountdown.setText(String.format("%d", millisUntilFinished / 1000));
                     }
 
                 }
@@ -222,8 +247,8 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnClic
                 @Override
                 public void onFinish() {
 
-                    switchCompat.setChecked(true);
-                    txtCountdown.setText("");
+                    mSwitchCompat.setChecked(true);
+                    mTxtCountdown.setText("");
                     lightSwitch();
                 }
             }.start();
