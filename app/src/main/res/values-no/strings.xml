@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JuletreTenning</string>
+    <string name="btnCountdown">Start nedtelling</string>
+    <string name="img_description">Et blinkende juletre</string>
+</resources>

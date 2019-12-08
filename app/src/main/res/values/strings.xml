@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">ChristmasTreeLighting</string>
-
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="btnCountdown">Start Countdown</string>
     <string name="img_description">A flashing Christmas Tree</string>
 </resources>
